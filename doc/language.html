@@ -1,0 +1,132 @@
+<html>
+<head>
+<title>The Subol Language</title>
+</head>
+
+<body>
+<h1>The Subol Language</h1>
+
+<h2>Compilation</h2>
+
+<p>In this order:
+
+<ul>
+  <li>Identifier: Turned into a name lookup operation.</li>
+
+  <li>Number/String: Turned into a Const.</li>
+
+  <li>NewLine: ignored.</li>
+
+  <li>List
+  <ul>
+    <li>If the first element is an identifier naming a special form,
+    the special is executed.</li>
+    <li>If the first element is an identifier naming a macro, the
+    macro is executed.</li>
+    <li>Otherwise, look up the first identifier as a name and call it
+    as a function.</li>
+  </ul>
+  </li>
+</ul>
+</p>
+
+<h2>Syntax</h2>
+<h3>Code Lists</h3>
+<p><code class="subol">( )</code></p>
+
+<p>
+<code class="subol">(foo bar baz)</code> creates a list to be
+evaluated. See `Compilation' above to see how.
+</p>
+
+<h3>Data Lists</h3>
+<p><code class="subol">[ ]</code></p>
+<p>
+<code class="subol">[1 2 3]</code> creates a list with three elements, 1, 2, and 3.
+</p>
+<p>
+Internally, it is translated to <code class="subol">(mklist 1 2 3)</code>
+</p>
+
+<h3>Blocks</h3>
+<p>It is possible to use indentation to delimit lists.</p>
+
+<pre class="subol">foo:
+    bar
+</pre>
+
+<p>
+Is equivalent to <code class="subol">(foo bar)</code>. That is, when a
+colon is followed by a newline and an indentation, an OpenParen is
+placed at the previous newline, and a CloseParen is placed at the
+un-indent that matches said indentation.
+</p>
+
+<p>It is recommended to use this syntax for the following forms: if,
+elif, else, for, while, def, class, defmacro. For example:</p>
+
+<pre class="subol">class MyClass ():
+
+    def (greet self):
+        (println "`Hello world!' from" self)
+
+    def (bye self):
+        (println "`Good bye!' from" self)
+</pre>
+
+
+<h3>Strings</h3>
+<p><code class="subol">" "</code></p>
+<p>
+
+<h2>Special forms</h2>
+
+<h3>set</h3>
+<p><code class="subol">(set name value)</code></p>
+
+<h3>def</h3>
+<p><code class="subol">(def &lt;arguments&gt; [docstring] body...)</code></p>
+
+<h3>return</h3>
+<p><code class="subol">(return [expr])</code></p>
+
+<h3>defmacro</h3>
+<p><code class="subol">(defmacro &lt;arguments&gt; [docstring] body...)</code></p>
+
+<h3>class</h3>
+<p><code class="subol">(class name bases [docstring] body...)</code></p>
+
+<h3>import</h3>
+<p><code class="subol">(import name grab...)</code></p>
+
+<h3>mklist</h3>
+<p><code class="subol">(mklist objects...)</code></p>
+<p>Note that you should use the [...] syntax to create lists, not mklist.</p>
+
+<h3>slice</h3>
+<p><code class="subol">(slice obj i)</code></p>
+<p><code class="subol">(slice obj start end)</code></p>
+<p><code class="subol">(slice obj start end step)</code></p>
+
+<h3>if</h3>
+<p><code class="subol">(if test body) [(elif test body)] [(else body)]</code></p>
+
+<h3>for</h3>
+<p><code class="subol">(for element iterator body)</code></p>
+
+<h3>while</h3>
+<p><code class="subol">(while test body)</code></p>
+
+<h3>break</h3>
+<p><code class="subol">(break)</code></p>
+
+<h3>raise</h3>
+<p><code class="subol">(raise [exception])</code></p>
+
+
+
+
+<hr />
+<address>radix@twistedmatrix.com</address>
+<!-- hhmts start -->Last modified: Fri Jun 20 18:42:15 EDT 2003 <!-- hhmts end -->
+</body> </html>

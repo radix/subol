@@ -1,0 +1,68 @@
+For release of 0.5
+==================
+
+ * Get rid of the distinction between exec and eval, ugh.
+    This means I'm going to have to do some special munging of the
+    ASTs so the last thing in a suite is Returned, IFF it's an
+    expression! Otherwise, Return None.
+
+    Ok, it needs to be kinda inverted. All specials that take
+    "arguments" should use something like
+    "compileWithEvaluationContext" to compile them.
+
+ * Make everything an expression. This includes assignment, `print',
+   *everything*, damnit!
+
+ * Implement all of the important ASTs.
+
+ * Print lines of code in tracebacks that go through subol code.
+
+ * Keyword arguments
+
+ * Dict syntax?
+
+
+Shortly after 0.5 (Or before if I'm feeling up to it)
+=====================================================
+
+ * Bytecode caching.
+
+   * Macros will conflict with bytecode caching. Unless! I cache
+   the bytecode in my own file format which remembers macro
+   definitions. .subc or some crap. Then I'll have special code to
+   load the macros out and store them in my ... persistent Compiler
+   instance? Guess I'm going to need one of those.
+
+ * Binary wrapper for the interactive interpreter so it can be used in
+   a shebang. :-(
+
+ * _some_ sort of support in emacs.
+
+   update 6-19-03 - Python-mode has proven to be quite sufficient. At
+     most, this will just be a snippet that adds .sub to the list of
+     extensions to automatically load python-mode for.
+
+ * I have an idea for an alternative to the import hook, if people
+   don't want the penalty. `pythonize-subol foo.sub' --> generates
+   foo.py that imports * from foo.sub.
+
+ * Syntax for adding reader macros for the rest of the current file.
+ * META implementation.
+
+Future
+======
+
+ * Bypass Python AST and generate bytecode directly. Python AST isn't
+   going to be flexible enough in the long run for the following
+   features. TTYTT, I'm not terribly interested in any of these
+   features, so it might be a long while before this happens.
+
+ * Tail Call Optimization.
+
+ * Lexical scoping.
+
+ * Macros that capture their environment. I'm not convinced this is
+   useful. I think an alterative idiom would be for the macro to
+   simply import a module and work with names inside it.
+
+

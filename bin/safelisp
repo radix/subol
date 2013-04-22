@@ -1,0 +1,15 @@
+#!/usr/bin/python
+import sys
+
+from safelisp import interpreter
+
+def main():
+    if len(sys.argv) > 1:
+        sys.argv.pop(0) # munch the subol interpreter
+        interpreter.evalString(open(sys.argv[0]).read())
+    else:
+        from safelisp import interactive
+        interactive.interact()
+
+if __name__ == '__main__':
+    main()

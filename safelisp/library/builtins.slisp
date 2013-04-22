@@ -1,0 +1,16 @@
+;(defmacro (named-lambda name lambdalist &body)
+;  [(I let) [[(I fun) (+ [(I lambda) lambdalist] body)]]
+;    [(I setattr) (I fun) "name" (I name)]
+;    (I fun)])
+
+(defun (car o)
+  (index o 0))
+
+(defun (cdr o)
+  (slice o 1 None))
+
+(defun (make-class name bases &meths)
+  (def o (make-object))
+  (for meth meths
+    (setattr o meth:name meth))
+  o)

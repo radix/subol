@@ -1,0 +1,208 @@
+(import twisted.trial unittest)
+
+class Subol (unittest.TestCase):
+
+    def (testMath self):
+        (self.assertEquals (+ 3 (/ 6 2)) 6)
+        (self.assertEquals (- 3 2) 1)
+        (self.assertEquals (* 5 5) 25)
+
+    def (testInfix self):
+        (self.assertEquals {3 + {6 / 2}} 6)
+        {a = 1}
+        (= b 2)
+        (self.assertEquals a 1)
+        (self.assertEquals b 2)
+
+    # Hello hello!
+
+    def (testREALInfixMath self):
+        (self.assertEquals {3 + 3 + 3} 9)
+
+    (= testREALInfixMath.todo "ueoa")
+
+    def (testAttrAssign self):
+        (class Foo () None)
+        (= Foo.x Foo)
+        (self.assertEquals Foo.x Foo)
+        (= Foo.x.y "hoo")
+        (self.assertEquals Foo.x.y "hoo")
+        (self.assertEquals Foo.y "hoo")
+
+
+    def (testPython self):
+        (import os)
+        (self.assert_ (os.path.isdir "/"))
+
+
+    def (testClasses self):
+        class Foo ():
+            "I am a docstring"
+            def (bar self):
+                "And another"
+                (return self)
+        
+        (= x (Foo))
+        (self.assertEquals (x.bar) x)
+        (self.assert_ (isinstance x Foo))
+        (self.assert_ {x isinstance Foo})
+        (self.assertEquals Foo.__doc__ "I am a docstring")
+        (self.assertEquals Foo.bar.__doc__ "And another")
+
+    def (testBasicMacros self):
+        (defmacro (hooj x) (return x))
+        (def (usemacro) (return (hooj pee)))
+        (def (usemacro2) (return (hooj unittest)))
+        (self.assertRaises NameError usemacro)
+        (self.assertEquals (usemacro2) unittest)
+
+    def (testReturning self):
+        def (foo):
+            1 2 (return 3)
+        (self.assertEquals (foo) 3)
+
+    def (testImplicitReturning self):
+        def (foo):
+            1 2 3
+        (self.assertEquals (foo) 3)
+
+    (= testImplicitReturning.todo "implicit returning is disabled. ")
+
+    def (testConditional self):
+        if (== 1 1):
+            (set x 1)
+        (self.assertEquals x 1)
+
+        (if (== 0 1) (/ 1 0))
+        (elif (== 2 2) (set y 2))
+        (else (set x 5))
+
+        (self.assertEquals y 2)
+        (self.assertEquals x 1)
+
+        if {0 == 2}:
+            (/ 1 0)
+        elif {2 == 3}:
+            (/ 1 0)
+        else:
+            (set x 5)
+
+        (self.assertEquals x 5)
+
+    def (testElseAlone self):
+        (def (foo) (else 3))
+        (self.assertRaises NameError foo)
+
+        (def (foo2) (elif 3))
+        (self.assertRaises NameError foo2)
+
+    def (testList self):
+        (set x [1 2 3])
+        (self.assertEquals (slice x 0) 1)
+
+    def (testWhile self):
+        (= i 0)
+        while 1:
+            (= i (+ i 1))
+            if (== i 10):
+                (break)
+        (self.assertEquals i 10)
+
+    def (testLoop self):
+        (= i 0)
+        loop:
+            (= i (+ i 1))
+            if (== i 10):
+                (break)
+        (self.assertEquals i 10)
+
+    def (testWhile2 self):
+        (= i 0)
+        while (!= i 5):
+            (= i (+ i 1))
+
+        (self.assertEquals i 5)
+
+    def (testFor self):
+        (set l [])
+        for x [1 2 3]:
+            (l.append (+ x 1))
+        (self.assertEquals l [2 3 4])
+
+    def (testLeetFor self):
+        (set l [])
+        for (k v) [[1 2] [3 4]]:
+            (l.append (+ k v))
+        (self.assertEquals l [3 7])
+
+    def (testSetitem self):
+        (set l [1 2])
+        (setitem l 0 3)
+        (self.assertEquals l [3 2])
+
+    def (testGenerators self):
+        (raise (unittest.SkipTest "HEE"))
+        def (gen):
+            (yield 1)
+            (yield 2)
+            (yield 3)
+        (= i 1)
+        (= g (gen))
+        (println g)
+
+        for x g:
+            (self.assertEquals i x)
+            (= i (+ i 1))
+
+        (= g (gen))
+        (self.assertEquals (g.next) 1)
+        (self.assertEquals (g.next) 2)
+        (self.assertEquals (g.next) 3)
+
+    def (testLambda self):
+        (self.assertEquals ((lambda (x) x) 3) 3)
+
+    def (testMultiAssign self):
+        (= (a b) [1 2])
+        (self.assertEquals a 1)
+        (self.assertEquals b 2)
+
+
+    def (testFancySlicing self):
+        (= l [1 2 3])
+        (self.assertEquals (elt l [1 2]) [2])
+        (self.assertEquals (elt l [1 0]) [2 3])
+        (= d (dict [["hello" l]]))
+        (self.assertEquals (elt d "hello" 2) 3)
+
+    def (testStarArgs self):
+        def (foo *args):
+            (return (list args))
+
+        (= l [1 2 3])
+        (self.assertEquals (foo *l) l)
+
+
+    def (testAttr self):
+        (class Foo () None)
+        (= o (Foo))
+        (= o.x 1)
+        (self.assertEquals o.x 1)
+        (self.assertEquals (attr o x) 1)
+
+##    def (testDefine self):
+##        (= l [])
+##        def (foobared f):
+##            return:
+##                lambda (*args **kwargs):
+##                    (l.append "FOOBAR")
+##                    (l.append (f))
+##        define foobared (a):
+##            (return "YES")
+##        (a)
+##        (self.assertEqual l ["FOOBAR" "YES"])
+         
+    def (testMacroWithBuiltinsEnv self):
+        defmacro (tmwbe *args):
+            (return (attr (elt args 0) name)) #elt is a builtin
+        (self.assertEquals (tmwbe a b) "a")

@@ -1,0 +1,88 @@
+(import sys)
+
+defmacro (define *rest):
+    "
+    I turn something like this:
+
+    (define foo bar baz (funname args) body)
+
+    into this
+
+    (def (funname args) body)
+    (= funname (baz (bar (foo funname))))
+    "
+
+    (import subol.tokens Identifier I)
+    (= rest (list rest))
+
+    #(println "HELLO")
+    # Accumulate filters by popping off all leading identifiers.
+    (= filters [])
+    while (isinstance (slice rest 0) Identifier):
+        (filters.append (rest.pop 0))
+
+    (= argspec (slice rest 0))
+    (= name (attr (slice argspec 0) name))
+
+    # construct the function definition. easy-shmeasy.
+    (= fundef (+ [(I "def")] rest))
+
+    # filterize starts as an Identifier, here, and in the loop becomes
+    # [filtername name], [filtername [filtername name]], and so on.
+    (= filterize name)
+    for filter filters:
+        (= filterize [filter filterize])
+
+    # and filterize finally becomes an assignment of (= funname filterize)
+    (= filterize [(I "=") filterize])
+
+    (return (+ fundef filterize))
+
+defmacro (loop *body):
+    (import subol.tokens I)
+    (return (+ [(I "while") 1] (list body)))
+
+def (print *args):
+    if {(len args) > 1}:
+        for x (slice args 0 -1):
+            (sys.stdout.write (str x))
+            (sys.stdout.write " ")
+        (sys.stdout.write (str (slice args -1)))
+    else:
+        (sys.stdout.write (str (slice args 0)))
+
+def (println *args):
+    (print *args)
+    (print "\n")
+
+
+
+def (ordered? low mid hi):
+    (return { (< low mid) and (< mid hi) })
+
+def (elt obj *args):
+    "(elt obj *slices_and_indices)
+
+    The elements of slices_and_indices can be lists that look
+    like the arguments to `slice' (i.e., `[start stop]' or `[start
+    stop step]'), where `stop' can be 0, meaning len(obj).
+
+    The elemnts can also be simple indices.
+
+    Each element of slices_and_indices will be used to slice the
+    object in turn, such that (elt obj 1 2) is equivalent to (slice
+    (slice obj 1) 2).
+    "
+    (= args (list args))
+    while args:
+        (= arg (args.pop 0))
+        if (not {arg isinstance list}):
+            (= obj (slice obj arg))
+        elif (== (len arg) 2):
+            (= stop (slice arg 1))
+            (if (== stop 0) (= stop (len obj)))
+            (= obj (slice obj (slice arg 0) stop))
+        elif (== (len arg) 3):
+            (= obj (slice obj (slice arg 0) (slice arg 1) (slice arg 2)))
+    (return obj)
+
