@@ -93,6 +93,13 @@ class Compiler(object):
     def getCode(self, ast, mode='single', filename='<Subol>'):
         #print "ast is", ast
         misc.set_filename(filename, ast)
+        # worklist = [ast]
+        # while worklist:
+        #     node = worklist.pop(0)
+        #     node.filename = filename
+        #     worklist.extend(node.getChildNodes())
+        #     print "NODE CHILDREN ARE", node, worklist
+
         syntax.check(ast)
         d = {'single': pycodegen.InteractiveCodeGenerator,
              'exec': pycodegen.ModuleCodeGenerator,
@@ -193,7 +200,7 @@ class Compiler(object):
         if len(form) == 2:
             return ast.Import([(form[1].name, None)])
         else:
-            r = ast.From(form[1].name, [(x.name, None) for x in form[2:]])
+            r = ast.From(form[1].name, [(x.name, None) for x in form[2:]], -1)
             return r
 
 
@@ -274,7 +281,7 @@ class Compiler(object):
     
         magicode = self._getMagicCodeForArgs(args)
         
-        return ast.Function(form[1][0].name, args, [], magicode, doc, code)
+        return ast.Function(None, form[1][0].name, args, [], magicode, doc, code)
 
     def special_return(self, form):
         if not 1 < len(form) < 3:

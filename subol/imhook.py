@@ -81,7 +81,7 @@ class GoodModuleLoader(ihooks.ModuleLoader):
 
 class GoodImporter(ihooks.ModuleImporter):
 
-    def import_module(self, name, globals={}, locals={}, fromlist=[]):
+    def import_module(self, name, globals={}, locals={}, fromlist=[], level=-1):
         ## This method deserves some explanation.
 
         ## First of all, this is a performance hack. Using ihooks'
