@@ -254,7 +254,7 @@ class Macro(SLObject):
     def __init__(self, name, lambdalist, body, env):
         SLObject.__init__(self)
         self.name = name
-        self.expand = Function('macro:' % name, lambdalist, body, env).callFunc
+        self.expand = Function('macro:' + name.pyvalue, lambdalist, body, env).callFunc
     
     def callMacro(self, interp, env, args):
         funresult = self.expand(interp, List(args))
