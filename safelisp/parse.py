@@ -1,6 +1,6 @@
 """
 
-This was rape'n'pasted from Subol's parser. It's much simplified: No
+This was copied from Subol's parser. It's much simplified: No
 indentation garbage, no newline tokens. We still probably don't need
 all the features it gives us (e.g., is separation of tokenization and
 parsing really necessary?).
